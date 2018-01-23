@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 from email.header import Header
 import smtplib
 import os
+from email.mime.multipart import MIMEMultipart
 
 # 加载测试文件
 # import test_case.test_baidu
@@ -17,19 +18,32 @@ import os
 
 # ===========定义发送邮件===========
 def send_mail(file_new):
+    from_addr = 'android4google@163.com'
+    from_pass = 'zhangyun0714'
+    to_addr = '309739685@qq.com'
+    smtp_server = 'smtp.163.com'
+
     f = open(file_new, 'rb')
     mail_body = f.read()
     f.close()
 
-    msg = MIMEText(mail_body, 'html', 'utf-8')
-    msg['Subject'] = Header('自动化测试报告', 'utf-8')
-    msg['From'] = 'android4google@163.com'
-    msg['To'] = "309739685@qq.com"
+
+    # 发送的附件
+    # send_file = open(file_new, 'rb').read()
+    att = MIMEText(mail_body, 'base64', 'utf-8')
+    att['Content-Type'] = 'application/octet-stream'
+    att['Content-Disposition'] = 'attachment; filename= "report.html"'
+
+    # msg = MIMEText('自动化测试报告，详情查看附件')
+    msgRoot = MIMEMultipart('related')
+    msgRoot['Subject'] = Header('自动化测试报告', 'utf-8')
+    msgRoot['From'] = from_addr
+    msgRoot.attach(att)
 
     smtp = smtplib.SMTP()
-    smtp.connect('smtp.163.com')
-    smtp.login('android4google@163.com', 'zhangyun0714')
-    smtp.sendmail('android4google@163.com', '309739685@qq.com', msg.as_string())
+    smtp.connect(smtp_server)
+    smtp.login(from_addr, from_pass)
+    smtp.sendmail(from_addr, to_addr, msgRoot.as_string())
     smtp.quit()
     print('email has send out!')
 
