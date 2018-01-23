@@ -5,11 +5,11 @@ import smtplib
 from email.header import Header
 
 # 发送Email地址和口令:
-from_addr = 'android4google@163.com'
-password = 'zhangyun0714'
+from_addr = 'xxxxxx@163.com'
+password = 'xxxxxx'
 
 # 输入收件人信息:
-to_addr = '309739685@qq.com'
+to_addr = 'xxxxxx@qq.com'
 # 输入SMTP服务器地址:
 smtp_server = 'smtp.163.com'
 
